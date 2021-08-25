@@ -67,14 +67,6 @@
     "ws": "^7.1.2",
     "yargs": "^15.3.1"
   },
-  "peerDependencies": {
-    "@theia/electron": "1.10.0"
-  },
-  "peerDependenciesMeta": {
-    "@theia/electron": {
-      "optional": true
-    }
-  },
   "publishConfig": {
     "access": "public"
   },
@@ -119,25 +111,16 @@
       "backend": "lib/node/i18n/i18n-backend-module"
     },
     {
-      "frontend": "lib/browser/menu/browser-menu-module",
-      "frontendElectron": "lib/electron-browser/menu/electron-menu-module"
+      "frontend": "lib/browser/menu/browser-menu-module"
     },
     {
-      "frontend": "lib/browser/window/browser-window-module",
-      "frontendElectron": "lib/electron-browser/window/electron-window-module"
+      "frontend": "lib/browser/window/browser-window-module"
     },
     {
-      "frontend": "lib/browser/keyboard/browser-keyboard-module",
-      "frontendElectron": "lib/electron-browser/keyboard/electron-keyboard-module",
-      "backendElectron": "lib/electron-node/keyboard/electron-backend-keyboard-module"
+      "frontend": "lib/browser/keyboard/browser-keyboard-module"
     },
     {
-      "frontendElectron": "lib/electron-browser/token/electron-token-frontend-module",
-      "backendElectron": "lib/electron-node/token/electron-token-backend-module"
-    },
-    {
-      "backend": "lib/node/hosting/backend-hosting-module",
-      "backendElectron": "lib/electron-node/hosting/electron-backend-hosting-module"
+      "backend": "lib/node/hosting/backend-hosting-module"
     }
   ],
   "keywords": [

@@ -39,7 +39,6 @@ main().catch(error => {
 async function main() {
     await mkdirp(shared);
     await Promise.all([
-        generateExportTheiaElectron(),
         Promise.all(exportStar.map(entry => generateExportStar(entry.module, entry.alias))),
         Promise.all(exportEqual.map(entry => generateExportEqual(entry.module, entry.namespace))),
         generateReadme(sharedModules),
@@ -56,24 +55,6 @@ async function generateReadme(reExports) {
     await fsp.writeFile(output, readme.replace('{{RE-EXPORTS}}', reExports.map(
         module => ` - [\`${module}@${getPackageRange(module)}\`](${getNpmUrl(module)})`
     ).join(getEOL(readme))));
-}
-
-/**
- * Special re-export case: The `electron` module comes from `@theia/electron`,
- * but instead of re-exporting it like `@theia/core/shared/@theia/electron` we'll
- * simplify this to `@theia/core/shared/electron`.
- */
-async function generateExportTheiaElectron() {
-    const base = path.resolve(shared, 'electron');
-    await Promise.all([
-        writeFileIfMissing(`${base}.js`, `\
-module.exports = require('@theia/electron');
-`),
-        writeFileIfMissing(`${base}.d.ts`, `\
-import Electron = require('@theia/electron');
-export = Electron;
-`),
-    ]);
 }
 
 async function generateExportStar(module, alias) {
@@ -162,13 +143,7 @@ function getNpmUrl(package) {
  */
 function getPackageRange(module) {
     const name = getPackageName(module);
-    if (name === 'electron') {
-        // In this case we are doing something weird, @theia/core does not depend on electron,
-        // but rather we depend on an optional peer dependency @theia/electron which itself depends
-        // on electron. For practical purposes, we re-export electron through @theia/electron own re-exports.
-        // The exports look like this: electron -> @theia/electron (optional) -> @theia/core/shared/electron
-        return require('@theia/electron/package.json').dependencies.electron;
-    }
+    if (name === 'electron') return '9.0.2';
     return dependencies[name] || devDependencies[name] || peerDependencies[name];
 }
 
