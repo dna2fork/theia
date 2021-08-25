@@ -22,77 +22,34 @@
 
 import { KeytarService } from '../common/keytar-protocol';
 import { injectable } from 'inversify';
-import { isWindows } from '../common';
-import * as keytar from 'keytar';
+// import { isWindows } from '../common';
+// import * as keytar from 'keytar';
 
 @injectable()
 export class KeytarServiceImpl implements KeytarService {
-    private static readonly MAX_PASSWORD_LENGTH = 2500;
-    private static readonly PASSWORD_CHUNK_SIZE = KeytarServiceImpl.MAX_PASSWORD_LENGTH - 100;
+//    private static readonly MAX_PASSWORD_LENGTH = 2500;
+//    private static readonly PASSWORD_CHUNK_SIZE = KeytarServiceImpl.MAX_PASSWORD_LENGTH - 100;
 
     async setPassword(service: string, account: string, password: string): Promise<void> {
-        if (isWindows && password.length > KeytarServiceImpl.MAX_PASSWORD_LENGTH) {
-            let index = 0;
-            let chunk = 0;
-            let hasNextChunk = true;
-            while (hasNextChunk) {
-                const passwordChunk = password.substring(index, index + KeytarServiceImpl.PASSWORD_CHUNK_SIZE);
-                index += KeytarServiceImpl.PASSWORD_CHUNK_SIZE;
-                hasNextChunk = password.length - index > 0;
-
-                const content: ChunkedPassword = {
-                    content: passwordChunk,
-                    hasNextChunk: hasNextChunk
-                };
-
-                await keytar.setPassword(service, chunk ? `${account}-${chunk}` : account, JSON.stringify(content));
-                chunk++;
-            }
-
-        } else {
-            await keytar.setPassword(service, account, password);
-        }
+        throw new Error('keytar service is disabled.');
+        return;
     }
 
-    deletePassword(service: string, account: string): Promise<boolean> {
-        return keytar.deletePassword(service, account);
+    async deletePassword(service: string, account: string): Promise<boolean> {
+        throw new Error('keytar service is disabled.');
+        return false;
     }
 
     async getPassword(service: string, account: string): Promise<string | undefined> {
-        const password = await keytar.getPassword(service, account);
-        if (password) {
-            try {
-                let { content, hasNextChunk }: ChunkedPassword = JSON.parse(password);
-                if (!content || !hasNextChunk) {
-                    return password;
-                }
-
-                let index = 1;
-                while (hasNextChunk) {
-                    const nextChunk = await keytar.getPassword(service, `${account}-${index++}`);
-                    const result: ChunkedPassword = JSON.parse(nextChunk!);
-                    content += result.content;
-                    hasNextChunk = result.hasNextChunk;
-                }
-
-                return content;
-            } catch {
-                return password;
-            }
-        }
+        throw new Error('keytar service is disabled.');
+        return undefined;
     }
     async findPassword(service: string): Promise<string | undefined> {
-        const password = await keytar.findPassword(service);
-        if (password) {
-            return password;
-        }
+        throw new Error('keytar service is disabled.');
+        return undefined;
     }
     async findCredentials(service: string): Promise<Array<{ account: string, password: string }>> {
-        return keytar.findCredentials(service);
+        throw new Error('keytar service is disabled.');
+        return [];
     }
-}
-
-interface ChunkedPassword {
-    content: string;
-    hasNextChunk: boolean;
 }
