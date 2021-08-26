@@ -143,7 +143,7 @@ function getNpmUrl(package) {
  */
 function getPackageRange(module) {
     const name = getPackageName(module);
-    if (name === 'electron') return '9.0.2';
+    if (name === 'electron') return '^9.0.2';
     return dependencies[name] || devDependencies[name] || peerDependencies[name];
 }
 

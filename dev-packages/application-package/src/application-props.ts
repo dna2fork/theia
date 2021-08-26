@@ -14,8 +14,6 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 
-import type { BrowserWindowConstructorOptions } from 'electron';
-
 /** `deepmerge/dist/cjs` */
 export const merge = require('deepmerge/dist/cjs');
 
@@ -53,7 +51,8 @@ export namespace ElectronFrontendApplicationConfig {
          *
          * Defaults to `{}`.
          */
-        readonly windowOptions?: BrowserWindowConstructorOptions;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        readonly windowOptions?: any;
     }
 }
 

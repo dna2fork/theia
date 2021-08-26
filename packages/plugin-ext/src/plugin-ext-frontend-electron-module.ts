@@ -14,6 +14,3 @@
  * SPDX-License-Identifier: EPL-2.0 OR GPL-2.0 WITH Classpath-exception-2.0
  ********************************************************************************/
 
-import mainModule from './main/electron-browser/plugin-ext-frontend-electron-module';
-
-export default mainModule;
